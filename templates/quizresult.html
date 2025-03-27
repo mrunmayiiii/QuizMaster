@@ -1,0 +1,60 @@
+{% extends "index.html" %}
+
+{% block content %}
+<!-- Navbar -->
+{% if time_exceeded %}
+<div class="alert alert-danger text-center">
+    <strong>Time Exceeded!</strong> Your quiz was automatically submitted because the time limit was reached.
+</div>
+{% endif %}
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2D336B;">
+    <a class="navbar-brand fw-bold" href="/user">{{ user.fullname }}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link text-light" href="/user/prevquizes">Previous Quizzes</a>
+            <a class="nav-item nav-link text-light " href="/logoutuser">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <h3 class="mb-3 text-center" style="color: #2D336B;">Quiz Result</h3>
+
+            <!-- Quiz Details Card -->
+            <div class="card shadow-lg border-0 mb-1.5" style="background-color: #2D336B;">
+                <div class="card-header text-white" >
+                    <h4 class="mb-0 text-center">Quiz Details</h4>
+                </div>
+            </div>
+
+            <!-- Quiz Result Card -->
+            <div class="card shadow-lg border-0 mb-5">
+                <div class="card-body text-center" style="background-color: white;">
+                    <h2 class="fw-bold" style="color: #2D336B;">Your Score</h2>
+                    <p class="fs-5 mb-2"><strong>Total Questions:</strong> {{ quet }}</p>
+                    <p class="fs-5 mb-2"><strong>Correct Answers:</strong> {{ score }}</p>
+
+                    {% if quet > 0 %}
+                        <p class="fs-4 fw-bold mb-3" style="color: #7886C7;">
+                            <span class="badge rounded-pill " style="background-color:#2D336B;">{{ (score / quet) * 100 }}%</span>
+                        </p>
+                    {% else %}
+                        <p class="fs-4 fw-bold text">Your Score: 0%</p>
+                        <p class="fs-5 text-muted">No questions were available in this quiz.</p>
+                    {% endif %}
+                    
+                    <a href="/user" class="btn text-white px-4 py-2" style="background-color: #2D336B; border-radius: 8px;">Back to Dashboard</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+

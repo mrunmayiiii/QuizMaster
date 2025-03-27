@@ -1,0 +1,101 @@
+{% extends "index.html" %}
+{% block content %}
+<style>
+    body {
+        background: url("{{ url_for('static', filename='pics/bg2.png') }}") no-repeat center center fixed;
+        background-size: cover;
+        backdrop-filter: brightness(0.8); /* Slightly dims the background for better readability */
+    }
+
+    .login-container {
+    margin-top: 50px; /* Reduce this value */
+    background: rgba(255, 255, 255, 0.85);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+}
+
+
+    .btn-primary {
+        background-color: #2D336B;
+        color: white;
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 8px;
+    }
+
+    .btn-primary:hover {
+        background-color: #1F2459;
+    }
+    .form-control {
+    border: 2px solid #2D336B; /* Adds a solid blue border */
+    padding: 10px;
+    border-radius: 8px; /* Rounds the corners */
+    font-size: 16px;
+}
+
+.form-control:focus {
+    border-color: #ff5733; /* Changes border color on focus */
+    box-shadow: 0 0 8px rgba(255, 87, 51, 0.5); /* Adds a glowing effect */
+    outline: none;
+}
+.quizmaster-heading {
+    position: absolute;
+    top: 5%; /* Adjust this value to move it closer */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 70px;
+    font-weight: bold;
+    color: transparent;
+    text-transform: uppercase;
+    text-align: center;
+    -webkit-text-stroke: 2px rgba(255, 255, 255, 0.7);
+    letter-spacing: 2px;
+    font-family: 'Arial', sans-serif;
+    z-index: 10;
+}
+@keyframes flicker {
+    0% { opacity: 1; }
+    50% { opacity: 0.8; }
+    100% { opacity: 1; }
+}
+
+.neon-text {
+    font-size: 60px;
+    font-weight: bold;
+    color: #7886C7;
+    text-shadow: 
+        0 0 5px #A9B5DF, 
+        0 0 10px #A9B5DF, 
+        0 0 20px #A9B5DF,
+        0 0 40px #8094C4, /* Secondary glow */
+        0 0 80px #506090; /* Outer glow */
+    animation: flicker 5s infinite alternate;
+}
+
+
+</style>
+
+<div class="quizmaster-heading neon-text">QUIZMASTER</div>
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="login-container">
+        <form class="form-group" action="/login" method="post">
+            <h1 class="text-center mb-4">Login</h1>
+            <div class="mb-3">
+                <label for="email" class="form-label ">Email address</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="abc@gmail.com" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="*******" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        <p class="text-center mt-3">Don't have an account? <a href="/register" class="btn btn-link">Register</a></p>
+    </div>
+</div>
+
+{% endblock %}

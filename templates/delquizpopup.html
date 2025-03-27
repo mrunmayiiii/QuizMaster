@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="container d-flex flex-column align-items-center justify-content-center vh-100">
+    <header class="text-center mb-4">
+        <h1>DELETE QUIZ CONFIRMATION</h1>
+    </header>
+    <div class="card shadow-lg p-4 bg-light" style="width: 45rem; border-radius: 20px; border: 2px solid #2D336B;">
+        <p class="text-center fw-bold text-danger mb-4">Please confirm deletion of this Quiz : <span class="fw-normal fw-bold text-decoration-underline">{{quiz.remarks}}</span></p>
+        <div class="d-flex justify-content-center gap-3">
+            <button type="submit" class="btn btn-danger btn-lg" formaction="/delquizpopup/{{quiz.id}}" formmethod="POST">Delete</button>
+            <a href="/admin" class="btn btn-secondary btn-lg">Cancel</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,56 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="container d-flex flex-column align-items-center justify-content-center min-vh-100 py-5">
+    <header class="text-center mb-4">
+        <h1 class="fw-bold text-dark">EDIT QUESTION DASHBOARD</h1>
+    </header>
+    
+    <div class="card shadow-lg p-4 border-0" style="width: 50rem; border-radius: 15px; background-color: #F8F9FA;">
+        <form class="form-group" action="/queedit/{{que.id}}" method="post">
+            <h2 class="text-center  text-dark">Edit Question</h2>
+            <p class="text-muted text-center mb-4">Please fill the details below</p>
+            <hr>
+
+            <div class="row g-3">
+                <div class="col-12">
+                    <label for="statement_que" class="form-label fw-semibold">Question Statement</label>
+                    <input type="text" class="form-control border rounded-3" id="statement_que" name="statement_que" placeholder="Enter question statement" required value="{{ que.statement_que }}">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="option1" class="form-label fw-semibold">Option 1</label>
+                    <input type="text" class="form-control border rounded-3" id="option1" name="option1" placeholder="Enter option 1" required value="{{ que.option1 }}">
+                </div>
+                <div class="col-md-6">
+                    <label for="option2" class="form-label fw-semibold">Option 2</label>
+                    <input type="text" class="form-control border rounded-3" id="option2" name="option2" placeholder="Enter option 2" required value="{{ que.option2 }}">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="option3" class="form-label fw-semibold">Option 3</label>
+                    <input type="text" class="form-control border rounded-3" id="option3" name="option3" placeholder="Enter option 3" required value="{{ que.option3 }}">
+                </div>
+                <div class="col-md-6">
+                    <label for="option4" class="form-label fw-semibold">Option 4</label>
+                    <input type="text" class="form-control border rounded-3" id="option4" name="option4" placeholder="Enter option 4" required value="{{ que.option4 }}">
+                </div>
+
+                <div class="col-12">
+                    <label for="correction" class="form-label fw-semibold">Correct Answer</label>
+                    <input type="text" class="form-control border rounded-3" id="correction" name="correction" placeholder="Enter correct answer" required value="{{ que.correction }}">
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <button type="submit" class="btn btn px-4 fw-semibold text-white" style="background-color: #2D336B; border-radius: 8px;">
+                    <i class="bi bi-pencil-square"></i> Edit Question
+                </button>
+                <a href="/admin" class="btn btn px-4 fw-semibold text-dark border" style="background-color: #A9B5DF; border-radius: 8px;">
+                    <i class="bi bi-arrow-left"></i> Go Back
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends "index.html" %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2D336B;">
+  <a class="navbar-brand text-light" href="/admin">QuizMaster</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" 
+      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse">
+      <div class="navbar-nav">
+          <a class="nav-item nav-link active text-light" href="/subject">Create Subject</a>
+          <a class="nav-item nav-link active text-light" href="/logout">Logout</a>
+          <a class="nav-item nav-link active text-light" href="/admin/summarypg">Summary</a>
+      </div>
+      <form class="form-inline ms-auto d-flex align-items-center gap-2" method="get" action="/adsearch">
+        <input class="form-control rounded-pill px-3 shadow-sm" 
+               type="search" 
+               placeholder="Search..." 
+               aria-label="Search" 
+               name="search" 
+               style="background-color: #A9B5DF; border: none;">
+    
+        <button class="btn text-light rounded-pill shadow-sm px-3" 
+                type="submit" 
+                style="background-color: #7886C7; border: none;">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+    </form>
+    
+  </div>
+</nav>
+<style>
+  .table-hover tbody tr:hover {
+      background-color: #A9B5DF!important; 
+      color: black; 
+  }
+</style>
+<div class="container-fluid vh=100" style="background-color: #FFF2F2;">
+    <div class="row">
+        <div class="container-fluid col-10">
+            <h3 class="text-dark">Admin Dashboard</h3>
+            <h4 class="text-dark">Subjects</h4>
+            <table class="table w-100">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Subject Name</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for sub in subjects %}
+                  <tr>
+                    <td>{{ sub.name }}</td>
+                    <td>{{ sub.description }}</td>
+                    <td>
+                       <a href="/editsubject/{{sub.id}}" class="text-primary me-3">
+                           <i class="fa-solid fa-pen-to-square fa-2x"></i>
+                       </a>
+                       <a href="/showsubject/{{sub.id}}" class="text-warning me-3">
+                           <i class="fa-regular fa-eye fa-2x"></i>
+                       </a>
+                       <a href="/delsubject/{{sub.id}}" class="text-danger me-3">
+                           <i class="fa-solid fa-trash fa-2x"></i>
+                       </a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+            <h4 class="text-dark">User Dataset</h4>
+            <table class="table table-bordered table-hover table-responsive" style="background-color: #A9B5DF">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">User Name</th>
+                    <th scope="col">Quiz</th>
+                    <th scope="col">Topic</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col">Scores</th>
+                    <th scope="col">Timestamp</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for score in scores %}
+                  <tr>
+                    <th scope="row">{{ score.user_account.fullname }}</th>
+                    <td>{{ score.quiz_test.remarks }}</td>
+                    <td>{{ score.quiz_test.course_section.course_topic.name }}</td>
+                    <td>{{ score.quiz_test.course_section.name }}</td>
+                    <td>{{ score.scores }}</td>
+                    <td>{{ score.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

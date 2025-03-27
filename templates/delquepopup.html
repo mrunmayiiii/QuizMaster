@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="container d-flex flex-column align-items-center justify-content-center vh-100">
+    <header class="text-center mb-4">
+        <h1>DELETE QUESTION CONFIRMATION</h1>
+    </header>
+    <div class="card shadow-lg p-5 bg-light" style="width: 50rem; border-radius: 25px; border: 2px solid #2D336B;">
+        <p class="text-center fw-bold text-danger mb-4">Please confirm deletion of this question:</p>
+        <form action="/delquepopup/{{que.id}}" method="POST" class="d-flex justify-content-center gap-4">
+            <button type="submit" class="btn btn-danger btn-lg px-4 py-2" style="border-radius: 10px;">Delete</button>
+            <a href="/admin" class="btn btn-secondary btn-lg px-4 py-2" style="border-radius: 10px;">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

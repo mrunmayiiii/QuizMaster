@@ -1,0 +1,88 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2D336B;">
+    <a class="navbar-brand" href="/admin">QuizMaster</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <!-- <a class="nav-item nav-link" href="/chapter">Create subject </a> -->
+        <a class="nav-item nav-link active" href="/showquiz/{{quiz.id}}">QUIZ : {{quiz.remarks}}</a>
+        <a class="nav-item nav-link active text-light" href="/logout">Logout</a>
+
+      </div>
+    </div>
+  </nav>
+  <div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <!-- Quiz Title & Button -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="fw-bold text-dark">QUIZ : {{ quiz.remarks }}</h2>
+                <a href="/questionmaking/{{ quiz.id }}" 
+                   class="btn fw-semibold text-white shadow-sm px-4 py-2"
+                   style="background-color: #2D336B; border-radius: 8px; transition: 0.3s;">
+                   <i class="bi bi-plus-circle"></i> Create Questions
+                </a>
+            </div>
+
+            {% if questions|length > 0 %}
+            <!-- Styled Table -->
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover text-center align-middle shadow-sm" style="border-radius: 10px; overflow: hidden;">
+                    <thead class="thead-dark text-white" style="background-color: #2D336B;">
+                        <tr>
+                            <th>Question</th>
+                            <th>Option 1</th>
+                            <th>Option 2</th>
+                            <th>Option 3</th>
+                            <th>Option 4</th>
+                            <th>Correct Answer</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for que in questions %}
+                        <tr>
+                            <td class="fw-semibold">{{ que.statement_que }}</td>
+                            <td class="text-muted">{{ que.option1 }}</td>
+                            <td class="text-muted">{{ que.option2 }}</td>
+                            <td class="text-muted">{{ que.option3 }}</td>
+                            <td class="text-muted">{{ que.option4 }}</td>
+                            <td class="fw-bold text-success">{{ que.correction }}</td>
+                            <td>
+                                <a href="/queedit/{{ que.id }}" class="text-primary me-3">
+                                    <i class="fa-solid fa-pen-to-square fa-2x"></i>
+                                </a>
+                                <a href="/delquepopup/{{ que.id }}" class="text-danger me-3">
+                                    <i class="fa-solid fa-trash fa-2x"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <style>
+                .custom-alert {
+                    background-color: #2D336B; /* Custom color */
+                    color: rgb(255, 255, 255); /* White text for contrast */
+                    border: none; /* Remove default border */
+                    border-radius: 8px; /* Rounded corners */
+                    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+                }
+            </style>
+            
+            <div class="alert custom-alert text-center" style="max-width: 400px; margin: auto;">
+                <h5 class="fw-bold mb-0">No Quizzes Available</h5>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

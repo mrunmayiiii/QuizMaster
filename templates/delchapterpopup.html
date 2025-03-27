@@ -1,0 +1,16 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="container d-flex flex-column align-items-center justify-content-center vh-100">
+    <header class="text-center mb-4">
+        <h1>DELETE CHAPTER CONFIRMATION</h1>
+    </header>
+    <div class="card shadow-lg p-4 bg-light" style="width: 50rem; border-radius: 20px;">
+        <p class="text-center fw-bold text-danger mb-4">Please confirm deletion of this chapter:  <span class="fw-normal fw-bold text-decoration-underline">{{chapter.name}}</span></p>
+        <form action="/delchapterpopup/{{chapter.id}}" method="POST" class="d-flex justify-content-center gap-3">
+            <button type="submit" class="btn btn-danger btn-lg">Delete</button>
+            <a href="/admin" class="btn btn-secondary btn-lg">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

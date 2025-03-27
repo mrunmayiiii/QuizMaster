@@ -1,0 +1,36 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="container d-flex flex-column align-items-center justify-content-center vh-100">
+    <header class="text-center">
+        <h1 class="text-center fw-bold mb-3">EDIT QUIZ DASHBOARD</h1>
+    </header>
+    <div class="card shadow-lg p-4" style="width: 50rem; border-radius: 15px;">
+        <form class="form-group" action="/quizedit/{{quiz.id}}" method="post">
+            <h1 class="text-center fw mb-3">Edit Quiz</h1>
+            <p class="text-muted text-center">Please fill the details</p>
+            <hr>
+            <div class="mb-3">
+                <label for="remarks" class="form-label">Remarks</label>
+                <input type="remarks" class="form-control" id="remarks" name="remarks" placeholder="remarks" required value="{{quiz.remarks}}">
+            </div>
+            <div class="mb-3">
+                <label for="date_ofquiz" class="form-label">Date of Quiz</label>
+                <input type="date" class="form-control" id="date_ofquiz" name="date_ofquiz" placeholder="date_ofquiz" required value="{{quiz.date_ofquiz}}">
+            </div>
+            <div class="mb-3">
+                <label for="time_dur" class="form-label">Time duration</label>
+                <input type="time" class="form-control" id="time_dur" name="time_dur" placeholder="time_dur" required value="{{quiz.time_dur}}">
+            </div>
+            <div class="d-flex justify-content-between mt-4">
+                <button type="submit" class="btn btn px-4 fw-semibold text-white" style="background-color: #2D336B; border-radius: 8px;">
+                    <i class="bi bi-pencil-square"></i> Edit Quiz
+                </button>
+                <a href="/admin" class="btn btn px-4 fw-semibold text-dark border" style="background-color: #A9B5DF; border-radius: 8px;">
+                    <i class="bi bi-arrow-left"></i> Go Back
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "index.html" %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2D336B;">
+    <a class="navbar-brand fw-bold" href="/user">{{ user.fullname }}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link text-light" href="/user/prevquizes">Previous quizzes</a>
+            <a class="nav-item nav-link text-light " href="/logoutuser">Logout</a>
+            <a class="nav-item nav-link text-light" href="/userprofileedit">Edit Profile</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <h3 class="mb-3 text-center" style="color: #2D336B;">User Dashboard</h3>
+            
+            <div class="card shadow-lg mb-4 border-0">
+                <div class="card-header text-white" style="background-color: #2D336B;">
+                    <h4 class="mb-0">Quiz Details</h4>
+                </div>
+                <div class="card-body" style="background-color: white;">
+                    <table class="table table-hover text-center">
+                        <thead>
+                            <tr style="background-color: #A9B5DF; color: #2D336B;">
+                                <th>Remarks</th>
+                                <th>Date of Quiz</th>
+                                <th>Time Duration (HH:MM)</th>
+                                <th>Subject</th>
+                                <th>Chapter</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for q in quizes %}
+                            <tr>
+                                <td>{{ q.remarks }}</td>
+                                <td>{{ q.date_ofquiz.strftime('%Y-%m-%d') }}</td>
+                                <td>{{ q.time_dur }}</td>
+                                <td>{{ q.subject.name if q.subject else 'N/A' }}</td>
+                                <td>{{ q.topic if q.topic else 'N/A' }}</td>
+                                <td>
+                                    <a href="/quizstart/{{ q.id }}" class="btn text-white" style="background-color: #2D336B;">Start Quiz</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

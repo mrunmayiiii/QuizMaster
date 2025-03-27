@@ -1,0 +1,78 @@
+{% extends "index.html" %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2D336B;">
+  <a class="navbar-brand" href="/admin">QuizMaster</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" 
+      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse">
+      <div class="navbar-nav">
+          <a class="nav-item nav-link active" href="/subject">Create Subject</a>
+          <a class="nav-item nav-link text-light" href="/logout">Logout</a>
+      </div>
+
+      <form class="form-inline ms-auto d-flex align-items-center gap-2" method="get" action="/adsearch">
+          <input class="form-control rounded-pill px-3 shadow-sm" type="search" placeholder="Search..." aria-label="Search" name="search" style="background-color: #A9B5DF; border: none;">
+          <button class="btn text-light rounded-pill shadow-sm px-3" type="submit" style="background-color: #7886C7; border: none;"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </form>
+  </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-10">
+            {% if users or subjects or chapters or quizes %}  {# Show results only if they exist #}
+                {% if users %}
+                    <h3>USERS</h3>
+                    <div class="d-flex flex-wrap">
+                        {% for user in users %}
+                            <div class="p-2 border rounded m-2 btn ms-3 btn-lg" style="background-color: #A9B5DF; color: black;">
+                                {{ user.fullname }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if subjects %}
+                    <h3>COURSE SUBJECTS</h3>
+                    <div class="d-flex flex-wrap">
+                        {% for subject in subjects %}
+                            <div class="p-2 border rounded m-2 btn ms-3 btn-lg" style="background-color: #A9B5DF; color: black;">
+                                {{ subject.name }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if chapters %}
+                    <h3>CHAPTERS</h3>
+                    <div class="d-flex flex-wrap">
+                        {% for chapter in chapters %}
+                            <div class="p-2 border rounded m-2 btn ms-3 btn-lg" style="background-color: #A9B5DF; color: black;">
+                                {{ chapter.name }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if quizes %}
+                    <h3>QUIZES</h3>
+                    <div class="d-flex flex-wrap">
+                        {% for quiz in quizes %}
+                            <div class="p-2 border rounded m-2 btn ms-3 btn-lg" style="background-color: #A9B5DF; color: black;">
+                                {{ quiz.remarks }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% else %}
+                <h3>No results found</h3>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

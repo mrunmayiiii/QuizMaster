@@ -1,0 +1,126 @@
+{% extends "index.html" %}
+{% block content %}
+<section class="vh-100 d-flex flex-column justify-content-center align-items-center"
+         style="background: url('/static/pics/bg2.png') no-repeat center center/cover; background-attachment: fixed;">
+
+    <!-- QuizMaster Heading -->
+    <div class="quizmaster-heading">QUIZMASTER</div>
+
+    <div class="container mt-5">  <!-- Added margin-top to push content down -->
+        <div class="row justify-content-center">
+            <div class="col-lg-5">
+                <div class="card shadow-lg px-4 py-3" style="border-radius: 12px; background: white; max-width: 500px;">
+                    <div class="card-body">
+                        <h2 class="text-center fw-bold mb-4">REGISTER</h2>
+                        <form action="/register" method="post">
+                            <div class="mb-1">
+                                <label for="fullname" class="form-label">Full Name</label>
+                                <input type="text" class="form-control input-style" id="fullname" name="fullname" placeholder="John Doe" required>
+                            </div>
+                            <div class="mb-1">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control input-style" id="email" name="email" placeholder="abc@gmail.com" required>
+                            </div>
+                            <div class="mb-1">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control input-style" id="password" name="password" placeholder="*******" required>
+                            </div>
+                            <div class="mb-1">
+                                <label for="qualification" class="form-label">Qualification</label>
+                                <input type="text" class="form-control input-style" id="qualification" name="qualification" placeholder="BTech" required>
+                            </div>
+                            <div class="mb-2">
+                                <label for="dob" class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control input-style" id="dob" name="dob" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 rounded-pill shadow-sm">Register</button>
+                        </form>
+                        <p class="text-center mt-2">
+                            Already have an account? 
+                            <a href="/login" class="btn btn-link">Login</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+  
+    
+
+    /* QuizMaster Heading Fix */
+    .quizmaster-heading {
+    position: absolute;
+    top: 2%; /* Changed from 2% to 10% to move it down a bit */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 70px; /* Increased from 60px to 70px */
+    font-weight: bold;
+    color: transparent;
+    text-transform: uppercase;
+    text-align: center;
+    -webkit-text-stroke: 2px rgba(255, 255, 255, 0.8); /* Slightly increased opacity */
+    letter-spacing: 4px; /* Increased from 2px to 4px */
+    font-family: 'Arial', sans-serif;
+    z-index: 1000;
+    margin-bottom: 30px; /* Increased from 20px */
+}
+
+/* Card positioning adjustment */
+.container.mt-5 {
+    margin-top: 6rem !important; /* Increase top margin to move card down */
+}
+.card-body {
+    padding-top: 8px;    /* Reduce top padding */
+    padding-bottom: 8px; /* Reduce bottom padding */
+}
+.card {
+    max-width: 500px;
+    padding: 10px;
+    margin: 0 auto; /* Center the card */
+}
+
+    /* Input Field Fix */
+    .input-style {
+        border: 1.5px solid #000000;
+        border-radius: 6px;
+        padding: 8px;
+        font-size: 15px;
+    }
+
+    /* Primary Button */
+    .btn-primary {
+        background-color: #2D336B;
+        color: white;
+        font-size: 16px;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    .btn-primary:hover {
+        background-color: #1A1F4A;
+    }
+
+    /* Background Fix */
+    section {
+        min-height: 100vh;
+    }
+ h2.text-center.fw-bold.mb-4 {
+    padding-top: 5px;    /* Reduce top space */
+    padding-bottom: 5px; /* Reduce bottom space */
+    margin: 0 !important; /* Remove default margins completely and override Bootstrap */
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+    -webkit-text-fill-color: black !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+input {
+    background-color: white !important;
+}
+</style>
+{% endblock %}

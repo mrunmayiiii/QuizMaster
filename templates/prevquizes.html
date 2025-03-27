@@ -1,0 +1,66 @@
+{% extends "index.html" %}
+
+{% block content %}
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2D336B;">
+    <a class="navbar-brand fw-bold" href="/user">{{ user.fullname }}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link text-light" href="/user/prevquizes">Previous Quizzes</a>
+            <a class="nav-item nav-link text-light" href="/logoutuser">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Dashboard Container -->
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <h3 class="text-center mb-3" style="color: #2D336B;">User Dashboard</h3>
+
+            <!-- Quiz Details Card -->
+            <div class="card shadow-lg border-0 mb-4">
+                <div class="card-header text-white" style="background-color: #2D336B;">
+                    <h4 class="mb-0 text-center">Quiz Details</h4>
+                </div>
+
+                <div class="card shadow-lg border-0">
+                    <div class="card-body" style="background-color: white;">
+                        <table class="table table-hover table-bordered text-center">
+                            <thead class="text-white" style="background-color: #2D336B;">
+                                <tr>
+                                    <th>Quiz Name</th>
+                                    <th>Subject</th>
+                                    <th>Chapter</th>
+                                    <th>Score</th>
+                                    <th>Date of Quiz</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for q in user.user_scores %}
+                                <tr>
+                                    <td>{{ q.quiz_test.remarks }}</td>
+                                    <td>{{ q.quiz_test.course_section.name }}</td>
+                                    <td>{{ q.quiz_test.course_section.course_topic.name }}</td>
+                                    <td class="fw-bold text-primary">{{ q.scores }}</td>
+                                    <td>{{ q.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- User Scores Table -->
+           
+
+        </div>
+    </div>
+</div>
+{% endblock %}

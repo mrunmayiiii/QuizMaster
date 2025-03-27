@@ -1,0 +1,54 @@
+{% extends "index.html" %}
+
+
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2D336B;">
+  <a class="navbar-brand text-light" href="/admin">QuizMaster</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" 
+      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse">
+      <div class="navbar-nav">
+          <a class="nav-item nav-link active text-light" href="/subject">Create Subject</a>
+          <a class="nav-item nav-link active text-light" href="/logout">Logout</a>
+          
+        </div>
+
+      <form class="form-inline ms-auto d-flex" method="get" action="/adsearch">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="search" name="search" style="background-color: #A9B5DF;">
+          <button class="btn btn-outline-success text-light" type="submit" style="background-color: #7886C7;">Search</button>
+      </form>
+  </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-lg mb-5" >
+                <div class="card-header text-white" style="background-color: #2D336B;">
+                    <h4>Quiz Statistics</h4>
+                </div>
+                <div class="card-body">
+                    <img src="..\static\pics\summary.png" alt="Quiz Statistics" class="img-fluid">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-lg mb-5">
+                <div class="card-header text-white" style="background-color: #2D336B;">
+                    <h4>User Attempts</h4>
+                </div>
+                <div class="card-body">
+                    <img src="..\static\pics\piechartsummary.png" alt="User Attempts" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+              
+   
+{% endblock %}
+

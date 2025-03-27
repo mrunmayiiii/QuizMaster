@@ -1,0 +1,31 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+<div class="container d-flex flex-column align-items-center justify-content-center vh-100">
+    <div class="card shadow-lg border-dark p-4" style="width: 50rem; border-radius: 15px;">
+        <form class="form-group" action="/subject" method="post">
+            <h1 class="text-center fw-bold mb-3">Create Subject</h1>
+            <p class="text-muted text-center">Please fill the details</p>
+            <hr>
+            <div class="mb-3">
+                <label for="name" class="form-label">Subject Name</label>
+                <input type="name" class="form-control" id="name" name="name"  placeholder="Maths" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <input type="description" class="form-control" id="description" name="description"  placeholder="Description" required>
+            </div>
+            <div class="d-flex justify-content-between mt-2">
+                <button type="submit" class="btn px-4 py-2 fw-semibold text-white shadow-sm" 
+                        style="background-color: #2D336B; border-radius: 8px; transition: 0.3s;"><i class="fa-solid fa-plus"></i> Create Subject</button>
+                        <a href="/admin" class="btn px-4 py-2 fw-semibold text-dark border shadow-sm" 
+                        style="background-color: #A9B5DF; border-radius: 8px; transition: 0.3s;">
+                         <i class="bi bi-arrow-left"></i> Go Back
+                     </a>            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+

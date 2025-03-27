@@ -1,0 +1,53 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+<div class="container d-flex flex-column align-items-center justify-content-center vh-100">
+    <div class="card shadow-lg p-4" style="width: 50rem; border-radius: 15px;">
+        <form class="form-group" action="/questionmaking/{{quizid}}" method="post">
+            <h1 class="text-center fw-bold mb-3">Add Question</h1>
+            <p class="text-muted text-center">Please fill the details</p>
+            <hr>
+            
+            <div class="mb-3">
+                <label for="statement_que" class="form-label">Question Statement</label>
+                <input type="text" class="form-control" id="statement_que" name="statement_que"  placeholder="Question statement" required>
+            </div>
+            <div class="mb-3">
+                <label for="option1" class="form-label">Option 1</label>
+                <input type="text" class="form-control" id="option1" name="option1"  placeholder="option 1" required>
+            </div>
+            <div class="mb-3">
+                <label for="option2" class="form-label">Option 2</label>
+                <input type="text" class="form-control" id="option2" name="option2"  placeholder="option 2" required>
+            </div>
+            <div class="mb-3">
+                <label for="option3" class="form-label">Option 3</label>
+                <input type="text" class="form-control" id="option3" name="option3"  placeholder="option 3" required>
+            </div>
+            <div class="mb-3">
+                <label for="option4" class="form-label">Option 4</label>
+                <input type="text" class="form-control" id="option4" name="option4"  placeholder="option 4" required>
+            </div>
+            <div class="mb-3">
+                <label for="correction" class="form-label">Correct answer</label>
+                <input type="text" class="form-control" id="correction" name="correction"  placeholder="correction" required>
+            </div>
+            <div class="d-flex justify-content-between mt-2">
+                <button type="submit" class="btn px-4 py-2 fw-semibold text-white shadow-sm" 
+                        style="background-color: #2D336B; border-radius: 8px; transition: 0.3s;">
+                    <i class="fa-solid fa-plus"></i> Add Question
+                </button>
+                <a href="/admin" class="btn px-4 py-2 fw-semibold text-dark border shadow-sm" 
+                   style="background-color: #A9B5DF; border-radius: 8px; transition: 0.3s;">
+                    <i class="bi bi-arrow-left"></i> Go Back
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+</div>
+{% endblock %}
+
+
