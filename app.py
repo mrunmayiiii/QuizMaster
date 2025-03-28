@@ -1238,8 +1238,8 @@ def summarypg():
 
         # Handle case when all values are zero
         if sum(triedvalues) > 0:
-            plt.figure(figsize=(7, 5))
-            plt.pie(triedvalues, labels=trieduser, autopct='%1.1f%%', shadow=True, startangle=90)
+            plt.figure(figsize=(10, 10))
+            plt.pie(triedvalues, labels=trieduser, autopct='%1.1f%%', shadow=True, startangle=90,pctdistance=0.85)
             plt.title("User Attempts")
             plt.savefig("static/pics/piechartsummary.png")
             plt.close()
