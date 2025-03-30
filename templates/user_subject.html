@@ -1,0 +1,63 @@
+{% extends "index.html" %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2D336B;">
+    <a class="navbar-brand fw-bold" href="/user">{{ user.fullname }}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link text-light" href="/user">Dashboard</a>
+            <a class="nav-item nav-link text-light" href="/user/prevquizes">Previous quizzes</a>
+            <a class="nav-item nav-link text-light" href="/user/progress">My Progress</a>
+            <a class="nav-item nav-link text-light" href="/logoutuser">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/user">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ subject.name }}</li>
+                </ol>
+            </nav>
+            
+            <div class="card shadow-lg mb-4 border-0">
+                <div class="card-header text-white" style="background-color: #2D336B;">
+                    <h4 class="mb-0">{{ subject.name }}</h4>
+                </div>
+                <div class="card-body">
+                    <p class="lead">{{ subject.description }}</p>
+                    
+                    <h5 class="mt-4 mb-3" style="color: #2D336B;">Chapters</h5>
+                    <div class="row">
+                        {% for chapter in chapters %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <div class="card-header text-white" style="background-color: #2D336B;">
+                                    <h5 class="mb-0">{{ chapter.name }}</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>{{ chapter.description }}</p>
+                                    <div class="text-center">
+                                        <a href="/user/chapter/{{ chapter.id }}" class="btn text-white" style="background-color: #2D336B;">View Quizzes</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="col-12 text-center">
+                            <p class="lead">No chapters available for this subject yet.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

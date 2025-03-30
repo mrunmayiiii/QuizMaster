@@ -17,6 +17,7 @@ import matplotlib.pyplot as plt
 #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
 #pip freeze>requirements.txt
 #pip install-r requirements.txt
+
 curr_dir=os.path.dirname(os.path.abspath(__file__))
 app=Flask(__name__,template_folder="templates")
 app.config["SQLALCHEMY_DATABASE_URI"]="sqlite:///quizmaster.db"
@@ -66,6 +67,19 @@ class QuizTest(db.Model):
     course_section=db.relationship("CourseSection", back_populates='quizzes')
     quiz_questions=db.relationship("QuizQuestion",back_populates='quiz_test',cascade='all,delete-orphan')
     user_scores=db.relationship('UserScore',back_populates='quiz_test',cascade='all,delete-orphan')
+    # Add this to your QuizTest class
+    @property
+    def subject(self):
+        if self.course_section:
+            topic = CourseTopic.query.filter_by(id=self.course_section.topic_id).first()
+            return topic
+        return None
+
+    @property
+    def topic(self):
+        if self.course_section:
+            return self.course_section.name
+        return None
 
 class QuizQuestion(db.Model):
     __tablename__="QuizQuestion"
@@ -179,16 +193,26 @@ def logoutuser():
 @app.route("/showsubject/<int:subid>",methods=["POST", "GET"])
 def showsubject(subid):
     if 'admin' in session:
-        topic=CourseTopic.query.filter(subid==subid).first()
-        sections=CourseSection.query.filter(subid==subid).all()
-        return render_template("showsubject.html",subject=topic,chapter=sections)
+        topic = CourseTopic.query.filter_by(id=subid).first()
+        if topic:
+            sections = CourseSection.query.filter_by(topic_id=subid).all()
+            return render_template("showsubject.html", subject=topic, chapter=sections)
+        else:
+            flash("Subject not found", "error")
+            return redirect("/admin")
+    return redirect("/login")
 
-@app.route("/showquiz/<int:quizid>",methods=["POST", "GET"])
+@app.route("/showquiz/<int:quizid>", methods=["POST", "GET"])
 def showquiz(quizid):
     if 'admin' in session:
-        quiz=QuizTest.query.filter(quizid==quizid).first()
-        questions=QuizQuestion.query.filter(quizid==quizid).all()
-        return render_template("showquiz.html",quiz=quiz,questions=questions)
+        quiz = QuizTest.query.filter_by(id=quizid).first()
+        if quiz:
+            questions = QuizQuestion.query.filter_by(quiz_id=quizid).all()
+            return render_template("showquiz.html", quiz=quiz, questions=questions)
+        else:
+            flash("Quiz not found", "error")
+            return redirect("/admin")
+    return redirect("/login")
 
 @app.route("/showchapter/<int:chapid>",methods=["POST", "GET"])
 def showchapter(chapid):
@@ -432,10 +456,34 @@ def delquepopup(queid):
 @app.route("/user")
 def userdash():
     if 'user' in session:
-        quizzes=QuizTest.query.all()
-        user=UserAccount.query.filter_by(id=session['user']).first()
-        return render_template('userdash.html',quizes=quizzes,user=user)
+        today = datetime.now().date()
+        topics = CourseTopic.query.all()  # Get all subjects
+        user = UserAccount.query.filter_by(id=session['user']).first()
+        return render_template('userdash.html', subjects=topics, user=user,today=today)
     return redirect('/login')
+
+@app.route("/user/subject/<int:subid>")
+def user_subject(subid):
+    if 'user' in session:
+        topic = CourseTopic.query.filter_by(id=subid).first()
+        sections = CourseSection.query.filter_by(topic_id=subid).all()
+        user = UserAccount.query.filter_by(id=session['user']).first()
+        return render_template('user_subject.html', subject=topic, chapters=sections, user=user)
+    return redirect('/login')
+
+@app.route("/user/chapter/<int:chapid>")
+def user_chapter(chapid):
+    if 'user' in session:
+        today = datetime.now().date()
+        section = CourseSection.query.filter_by(id=chapid).first()
+        quizzes = QuizTest.query.filter_by(section_id=chapid).all()
+        user = UserAccount.query.filter_by(id=session['user']).first()
+        return render_template('user_chapter.html', chapter=section, quizzes=quizzes, user=user,today=today)
+    return redirect('/login')
+
+
+
+
 
 #route to edit user profile details
 
@@ -495,6 +543,64 @@ def quizrandom(quizid):
         return render_template("quizrandom.html", quiz=quiz, questions=questions, user=user)
     return redirect("/login")
 
+@app.route("/user/search", methods=["GET"])
+def user_search():
+    if 'user' in session:
+        search_query = request.args.get('search', '').strip()
+        user = UserAccount.query.filter_by(id=session['user']).first()
+        
+        if not search_query:
+            return render_template("user_search.html", subjects=[], chapters=[], quizzes=[], user=user)
+            
+        subjects = CourseTopic.query.filter(CourseTopic.name.ilike('%'+ search_query+'%')).all()
+        chapters = CourseSection.query.filter(CourseSection.name.ilike('%'+ search_query+'%')).all()
+        quizzes = QuizTest.query.filter(QuizTest.remarks.ilike('%'+ search_query+'%')).all()
+        
+        return render_template("user_search.html", subjects=subjects, chapters=chapters, quizzes=quizzes, user=user)
+    return redirect("/login")
+
+@app.route("/user/progress")
+def user_progress():
+    if 'user' in session:
+        user = UserAccount.query.filter_by(id=session['user']).first()
+        scores = UserScore.query.filter_by(user_id=user.id).all()
+        
+        # Calculate statistics
+        total_attempts = len(scores)
+        if total_attempts > 0:
+            avg_score = sum(score.scores for score in scores) / total_attempts
+        else:
+            avg_score = 0
+        
+        # Create subject-wise progress data
+        subjects_data = {}
+        for score in scores:
+            quiz = QuizTest.query.filter_by(id=score.quiz_id).first()
+            if quiz:
+                section = CourseSection.query.filter_by(id=quiz.section_id).first()
+                if section:
+                    topic = CourseTopic.query.filter_by(id=section.topic_id).first()
+                    if topic:
+                        if topic.name not in subjects_data:
+                            subjects_data[topic.name] = {'attempts': 0, 'score': 0}
+                        subjects_data[topic.name]['attempts'] += 1
+                        subjects_data[topic.name]['score'] += score.scores
+        
+        for subject in subjects_data:
+            if subjects_data[subject]['attempts'] > 0:
+                subjects_data[subject]['avg'] = subjects_data[subject]['score'] / subjects_data[subject]['attempts']
+            else:
+                subjects_data[subject]['avg'] = 0
+        
+        # Sort and slice the scores before passing to template
+        sorted_scores = sorted(scores, key=lambda score: score.timestamp, reverse=True)
+        recent_scores = sorted_scores[:10]
+        
+        return render_template('user_progress.html', user=user, scores=scores,
+                              recent_scores=recent_scores, total_attempts=total_attempts, 
+                              avg_score=avg_score, subjects_data=subjects_data)
+    return redirect('/login')
+
 @app.route("/quizsubmission/<int:quizid>", methods=["GET", "POST"])
 def quizsubmission(quizid):
     if "user" in session:
@@ -523,7 +629,7 @@ def quizsubmission(quizid):
                 db.session.add(finalscore)
                 db.session.commit()
                 flash("Time limit exceeded. Your quiz has been submitted with a score of 0.", "danger")
-                return render_template("quizresult.html", score=0, quet=len(questions), user=user, time_exceeded=True)
+                return render_template("quizresult.html", score=0, total=len(questions), user=user, time_exceeded=True)
         
         score = 0
         for q in questions:
@@ -536,8 +642,10 @@ def quizsubmission(quizid):
         db.session.add(finalscore)
         db.session.commit()
         
-        return render_template("quizresult.html", score=score, quet=len(questions), user=user)
+        return render_template("quizresult.html", score=score, total=len(questions), user=user)
     return redirect("/login")
+
+
 
 #creating prev route to show all the previous attempted quizes to user
 

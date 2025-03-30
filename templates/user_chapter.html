@@ -1,0 +1,98 @@
+{% extends "index.html" %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2D336B;">
+    <a class="navbar-brand fw-bold" href="/user">{{ user.fullname }}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link text-light" href="/user">Dashboard</a>
+            <a class="nav-item nav-link text-light" href="/user/prevquizes">Previous quizzes</a>
+            <a class="nav-item nav-link text-light" href="/user/progress">My Progress</a>
+            <a class="nav-item nav-link text-light" href="/logoutuser">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/user">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="/user/subject/{{ chapter.topic_id }}">{{ chapter.course_topic.name }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ chapter.name }}</li>
+                </ol>
+            </nav>
+            
+            <div class="card shadow-lg mb-4 border-0">
+                <div class="card-header text-white" style="background-color: #2D336B;">
+                    <h4 class="mb-0">{{ chapter.name }}</h4>
+                </div>
+                <div class="card-body">
+                    <p class="lead">{{ chapter.description }}</p>
+                    
+                    <h5 class="mt-4 mb-3" style="color: #2D336B;">Available Quizzes</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr style="background-color: #A9B5DF; color: #2D336B;">
+                                    <th>Quiz</th>
+                                    <th>Date</th>
+                                    <th>Duration</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for quiz in quizzes %}
+                                <tr>
+                                    <td>{{ quiz.remarks }}</td>
+                                    <td>{{ quiz.date_ofquiz.strftime('%Y-%m-%d') }}</td>
+                                    <td>{{ quiz.time_dur }}</td>
+                                    <td>
+                                        {% set attempted = false %}
+                                        {% for score in user.user_scores %}
+                                            {% if score.quiz_id == quiz.id %}
+                                                {% set attempted = true %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        
+                                        {% if attempted %}
+                                            <span class="badge bg-success">Completed</span>
+                                        {% else %}
+                                            {% if quiz.date_ofquiz > today %}
+                                                <span class="badge bg-warning text-dark">Upcoming</span>
+                                            {% else %}
+                                                <span class="badge bg-primary">Available</span>
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if attempted %}
+                                            <a href="/user/prevquizes" class="btn btn-sm btn-secondary">View Results</a>
+                                        {% else %}
+                                            {% if quiz.date_ofquiz <= today %}
+                                                <a href="/quizstart/{{ quiz.id }}" class="btn btn-sm text-white" style="background-color: #2D336B;">Take Quiz</a>
+                                            {% else %}
+                                                <button class="btn btn-sm btn-secondary" disabled>Not Available</button>
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No quizzes available for this chapter yet.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

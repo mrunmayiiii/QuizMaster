@@ -1,60 +1,63 @@
 {% extends "index.html" %}
 
 {% block content %}
-<!-- Navbar -->
-{% if time_exceeded %}
-<div class="alert alert-danger text-center">
-    <strong>Time Exceeded!</strong> Your quiz was automatically submitted because the time limit was reached.
-</div>
-{% endif %}
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2D336B;">
     <a class="navbar-brand fw-bold" href="/user">{{ user.fullname }}</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-            <a class="nav-item nav-link text-light" href="/user/prevquizes">Previous Quizzes</a>
-            <a class="nav-item nav-link text-light " href="/logoutuser">Logout</a>
-        </div>
-    </div>
 </nav>
 
 <div class="container mt-4">
     <div class="row">
-        <div class="col-md-10 mx-auto">
-            <h3 class="mb-3 text-center" style="color: #2D336B;">Quiz Result</h3>
-
-            <!-- Quiz Details Card -->
-            <div class="card shadow-lg border-0 mb-1.5" style="background-color: #2D336B;">
-                <div class="card-header text-white" >
-                    <h4 class="mb-0 text-center">Quiz Details</h4>
+        <div class="col-md-12">
+            <div class="card shadow-lg mb-4 border-0">
+                <div class="card-header text-white" style="background-color: #2D336B;">
+                    <h4 class="mb-0">Quiz Results</h4>
                 </div>
-            </div>
-
-            <!-- Quiz Result Card -->
-            <div class="card shadow-lg border-0 mb-5">
-                <div class="card-body text-center" style="background-color: white;">
-                    <h2 class="fw-bold" style="color: #2D336B;">Your Score</h2>
-                    <p class="fs-5 mb-2"><strong>Total Questions:</strong> {{ quet }}</p>
-                    <p class="fs-5 mb-2"><strong>Correct Answers:</strong> {{ score }}</p>
-
-                    {% if quet > 0 %}
-                        <p class="fs-4 fw-bold mb-3" style="color: #7886C7;">
-                            <span class="badge rounded-pill " style="background-color:#2D336B;">{{ (score / quet) * 100 }}%</span>
-                        </p>
-                    {% else %}
-                        <p class="fs-4 fw-bold text">Your Score: 0%</p>
-                        <p class="fs-5 text-muted">No questions were available in this quiz.</p>
-                    {% endif %}
+                <div class="card-body text-center">
+                    <h3 class="mb-4">Your Score: <span class="fw-bold">{{ score }}/{{ total }}</span></h3>
                     
-                    <a href="/user" class="btn text-white px-4 py-2" style="background-color: #2D336B; border-radius: 8px;">Back to Dashboard</a>
+                    {% set percentage = (score / total * 100)|round %}
+                    
+                    <div class="progress mb-4" style="height: 30px;">
+                        <div class="progress-bar {% if percentage >= 70 %}bg-success{% elif percentage >= 40 %}bg-warning{% else %}bg-danger{% endif %}" 
+                             role="progressbar" style="width: {{ percentage }}%;" 
+                             aria-valuenow="{{ percentage }}" aria-valuemin="0" aria-valuemax="100">
+                            {{ percentage }}%
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        {% if percentage >= 70 %}
+                            <div class="alert alert-success" role="alert">
+                                <h4 class="alert-heading">Excellent!</h4>
+                                <p>You've done a great job on this quiz.</p>
+                            </div>
+                        {% elif percentage >= 40 %}
+                            <div class="alert alert-warning" role="alert">
+                                <h4 class="alert-heading">Good effort!</h4>
+                                <p>You're on the right track, but there's room for improvement.</p>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-danger" role="alert">
+                                <h4 class="alert-heading">Needs improvement</h4>
+                                <p>Consider reviewing the material and trying again.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+                        <a href="/user" class="btn text-white" style="background-color: #2D336B;">
+                            <i class="bi bi-arrow-left"></i> Back to Dashboard
+                        </a>
+                        <a href="/quizrandom/{{ quiz_id if quiz_id is defined else 0 }}" class="btn text-white" style="background-color: #2D336B;">
+                            <i class="bi bi-arrow-repeat"></i> Try Again
+                        </a>
+                    </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
 {% endblock %}
-

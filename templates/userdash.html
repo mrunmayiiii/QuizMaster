@@ -9,48 +9,97 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
             <a class="nav-item nav-link text-light" href="/user/prevquizes">Previous quizzes</a>
-            <a class="nav-item nav-link text-light " href="/logoutuser">Logout</a>
+            <a class="nav-item nav-link text-light" href="/user/progress">My Progress</a>
             <a class="nav-item nav-link text-light" href="/userprofileedit">Edit Profile</a>
+            <a class="nav-item nav-link text-light" href="/logoutuser">Logout</a>
         </div>
     </div>
 </nav>
 
 <div class="container mt-4">
     <div class="row">
-        <div class="col-md-10 mx-auto">
-            <h3 class="mb-3 text-center" style="color: #2D336B;">User Dashboard</h3>
+        <div class="col-md-12">
+            <div class="card shadow-lg mb-4 border-0">
+                <div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #2D336B;">
+                    <h4 class="mb-0">Available Subjects</h4>
+                    <form action="/user/search" method="GET" class="d-flex">
+                        <input type="text" name="search" class="form-control me-2" placeholder="Search subjects, chapters, quizzes...">
+                        <button type="submit" class="btn btn-light">Search</button>
+                    </form>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for subject in subjects %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <div class="card-header text-white" style="background-color: #2D336B;">
+                                    <h5 class="mb-0">{{ subject.name }}</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>{{ subject.description }}</p>
+                                    <div class="text-center">
+                                        <a href="/user/subject/{{ subject.id }}" class="btn text-white" style="background-color: #2D336B;">View Chapters</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="col-12 text-center">
+                            <p class="lead">No subjects available yet.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
             
             <div class="card shadow-lg mb-4 border-0">
                 <div class="card-header text-white" style="background-color: #2D336B;">
-                    <h4 class="mb-0">Quiz Details</h4>
+                    <h4 class="mb-0">Upcoming Quizzes</h4>
                 </div>
-                <div class="card-body" style="background-color: white;">
-                    <table class="table table-hover text-center">
-                        <thead>
-                            <tr style="background-color: #A9B5DF; color: #2D336B;">
-                                <th>Remarks</th>
-                                <th>Date of Quiz</th>
-                                <th>Time Duration (HH:MM)</th>
-                                <th>Subject</th>
-                                <th>Chapter</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for q in quizes %}
-                            <tr>
-                                <td>{{ q.remarks }}</td>
-                                <td>{{ q.date_ofquiz.strftime('%Y-%m-%d') }}</td>
-                                <td>{{ q.time_dur }}</td>
-                                <td>{{ q.subject.name if q.subject else 'N/A' }}</td>
-                                <td>{{ q.topic if q.topic else 'N/A' }}</td>
-                                <td>
-                                    <a href="/quizstart/{{ q.id }}" class="btn text-white" style="background-color: #2D336B;">Start Quiz</a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr style="background-color: #A9B5DF; color: #2D336B;">
+                                    <th>Quiz</th>
+                                    <th>Subject</th>
+                                    <th>Chapter</th>
+                                    <th>Date</th>
+                                    <th>Duration</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% set upcoming_quizzes = [] %}
+                                {% for subject in subjects %}
+                                    {% for section in subject.course_sections %}
+                                        {% for quiz in section.quizzes %}
+                                            {% if quiz.date_ofquiz >= today %}
+                                                {% set _ = upcoming_quizzes.append(quiz) %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                {% endfor %}
+                                
+                                {% for quiz in upcoming_quizzes[:5] %}
+                                <tr>
+                                    <td>{{ quiz.remarks }}</td>
+                                    <td>{{ quiz.subject.name }}</td>
+                                    <td>{{ quiz.topic }}</td>
+                                    <td>{{ quiz.date_ofquiz.strftime('%Y-%m-%d') }}</td>
+                                    <td>{{ quiz.time_dur }}</td>
+                                    <td>
+                                        <a href="/quizstart/{{ quiz.id }}" class="btn btn-sm text-white" style="background-color: #2D336B;">Take Quiz</a>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="6" class="text-center">No upcoming quizzes available.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

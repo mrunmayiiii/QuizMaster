@@ -1,0 +1,151 @@
+{% extends "index.html" %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2D336B;">
+    <a class="navbar-brand fw-bold" href="/user">{{ user.fullname }}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link text-light" href="/user">Dashboard</a>
+            <a class="nav-item nav-link text-light" href="/user/prevquizes">Previous quizzes</a>
+            <a class="nav-item nav-link text-light active" href="/user/progress">My Progress</a>
+            <a class="nav-item nav-link text-light" href="/logoutuser">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/user">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">My Progress</li>
+                </ol>
+            </nav>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card border-0 shadow-lg h-100">
+                        <div class="card-header text-white" style="background-color: #2D336B;">
+                            <h5 class="mb-0">Summary</h5>
+                        </div>
+                        <div class="card-body text-center">
+                            <div class="py-4">
+                                <h1 class="display-4">{{ total_attempts }}</h1>
+                                <p class="lead">Total Quizzes Attempted</p>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-8 mb-4">
+                    <div class="card border-0 shadow-lg h-100">
+                        <div class="card-header text-white" style="background-color: #2D336B;">
+                            <h5 class="mb-0">Subject Performance</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if subjects_data %}
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr style="background-color: #A9B5DF; color: #2D336B;">
+                                                <th>Subject</th>
+                                                <th>Attempts</th>
+                                              
+                                                <th>Performance</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for subject, data in subjects_data.items() %}
+                                            <tr>
+                                                <td>{{ subject }}</td>
+                                                <td>{{ data.attempts }}</td>
+                                               
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar" role="progressbar" 
+                                                    style="width: {{ data.avg }}%; background-color: {% if data.avg >= 80 %}#28a745{% elif data.avg >= 60 %}#17a2b8{% elif data.avg >= 40 %}#ffc107{% else %}#dc3545{% endif %};" 
+                                                    aria-valuenow="{{ data.avg }}" aria-valuemin="0" aria-valuemax="100">
+                                                </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div class="text-center py-5">
+                                    <p class="lead">No quiz attempts yet.</p>
+                                    <a href="/user" class="btn text-white" style="background-color: #2D336B;">Take a Quiz</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card shadow-lg mb-4 border-0">
+                <div class="card-header text-white" style="background-color: #2D336B;">
+                    <h4 class="mb-0">Recent Quiz Attempts</h4>
+                </div>
+                <div class="card-body">
+                    {% if scores %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr style="background-color: #A9B5DF; color: #2D336B;">
+                                        <th>Date</th>
+                                        <th>Subject</th>
+                                        <th>Chapter</th>
+                                        <th>Quiz</th>
+                                        <th>Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for score in recent_scores %}
+                                    {% set quiz = score.quiz_test %}
+                                    <tr>
+                                        <td>{{ score.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                                        <td>{{ quiz.subject.name if quiz and quiz.subject else 'N/A' }}</td>
+                                        <td>{{ quiz.topic if quiz and quiz.topic else 'N/A' }}</td>
+                                        <td>{{ quiz.remarks if quiz else 'N/A' }}</td>
+                                        <td>
+                                            {% if quiz and quiz.quiz_questions %}
+                                                {% set total_questions = quiz.quiz_questions|length %}
+                                                {% if total_questions > 0 %}
+                                                    {{ score.scores }}/{{ total_questions }} 
+                                                    ({{ "%.1f"|format(score.scores / total_questions * 100) }}%)
+                                                {% else %}
+                                                    {{ score.scores }}
+                                                {% endif %}
+                                            {% else %}
+                                                {{ score.scores }}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% if scores|length > 10 %}
+                            <div class="text-center mt-3">
+                                <a href="/user/prevquizes" class="btn text-white" style="background-color: #2D336B;">View All Attempts</a>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="text-center py-5">
+                            <p class="lead">No quiz attempts yet.</p>
+                            <a href="/user" class="btn text-white" style="background-color: #2D336B;">Take a Quiz</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
